@@ -209,12 +209,18 @@ namespace umons {
             hValue /= 6;
         }
     }
+    //% block
+    //% group="HSL"
     export function askLValue():number {
         return lValue
     }
+    //% block
+    //% group="HSL"
     export function askHValue():number {
         return hValue
     }
+    //% block
+    //% group="HSL"
     export function askSValue():number {
         return sValue
     }
