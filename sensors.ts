@@ -15,7 +15,7 @@ enum UmonsRgbEnum {
     RED,
     //% block="green"
     GREEN,
-    //£ block="blue"
+    //% block="blue"
     BLUE
 }
 /**
@@ -138,36 +138,6 @@ namespace umons {
         return Math.round(localValue / (redValue+greenValue+blueValue))
     }
 
-    /**
-     * Ask for the red component seen by the RGB sensor 
-     */
-    //% block
-    //% group="RGB"
-    export function redComponentIntensity (): number {
-        let redNormalValue = 0
-        redNormalValue = Math.round(redValue / clearValue * 255)
-        return redNormalValue
-    }
-    /**
-     * Ask for the green component seen by the RGB sensor 
-     */
-    //% block
-    //% group="RGB"
-    export function greenComponentIntensity (): number {
-        let greenNormalValue = 0
-        greenNormalValue = Math.round(greenValue / clearValue * 255)
-        return greenNormalValue
-    }
-    /**
-     * Ask for the red component seen by the RGB sensor 
-     */
-    //% block
-    //% group="RGB"
-    export function blueComponentIntensity (): number {
-        let blueNormalValue = 0
-        blueNormalValue = Math.round(blueValue / clearValue * 255)
-        return blueNormalValue
-    }
     /**
      * Ask for the luminance intensity seen by the RGB sensor
      */
