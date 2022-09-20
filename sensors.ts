@@ -25,6 +25,7 @@ enum UmonsRgbEnum {
 namespace umons {
     const rgbSensorAddress = 0x29
     let clearValue=0, redValue=0, greenValue=0, blueValue = 0
+    let hValue=0, sValue=0, lValue=0
     let rgbIntegrationDelay=0
     /**
      * Initialize a sensor connected on I2C
@@ -175,5 +176,46 @@ namespace umons {
         /* 4. Finally, compute the cct */
         cct = 449.0*Math.pow(nMcCamy, 3) + 3525.0*Math.pow(nMcCamy, 2) + 6823.3*nMcCamy+5520.33
         return cct
+    }
+
+    function transformRgbToHsv(): void {
+        let rd=redValue/255
+        let gd=greenValue/255
+        let bd=blueValue/255
+        let maxd = Math.max(Math.max(rd, gd), bd) 
+        let mind = Math.min(Math.min(rd, gd), bd)
+        lValue = (maxd + mind) / 2
+        if (maxd == mind) {
+            hValue = 0
+            sValue = 0 // achromatic
+        } else {
+            let d = maxd - mind;
+            if (lValue>0.5) {
+                sValue = d / (2 - maxd - mind)
+            } else {
+                sValue = d / (maxd+mind)
+            }
+            if (maxd==rd) {
+                if (gd<bd) {
+                    hValue = (gd - bd) / d + 6            
+                } else {
+                    hValue = (gd - bd) / d
+                }
+            } else if (maxd == gd) {
+                hValue = (bd - rd) / d + 2
+            } else if (maxd == bd) {
+                hValue = (rd - gd) / d + 4;
+            }
+            hValue /= 6;
+        }
+    }
+    export function askLValue():number {
+        return lValue
+    }
+    export function askHValue():number {
+        return hValue
+    }
+    export function askSValue():number {
+        return sValue
     }
 }
