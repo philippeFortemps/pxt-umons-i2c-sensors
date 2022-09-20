@@ -9,6 +9,15 @@ enum UmonsSensorEnum {
      * DISTANCE
      */
     }
+// Enumeration of reference colors
+enum UmonsRgbEnum {
+    //% block="red"
+    RED,
+    //% block="green"
+    GREEN,
+    //£ block="blue"
+    BLUE
+}
 /**
  * UMONS blocks
  */
@@ -32,6 +41,7 @@ namespace umons {
                 pins.i2cWriteRegister(rgbSensorAddress, 143,   0)
                 // set integration delay to 50 ms
                 rgbIntegrationDelay = 50
+                break
             }
         }
     }
@@ -65,10 +75,69 @@ namespace umons {
                 blueH = pins.i2cReadRegister(rgbSensorAddress, 155)
                 blueValue = blueH * 256 + blueL
                 pins.i2cWriteRegister(rgbSensorAddress, 128,   0)
+                break
             }
         }
     }
     
+    /**
+     * Ask for one component seen by the RGB sensor 
+     */
+    //% block
+    //% group="RGB"
+    export function componentIntensity (refColor:UmonsRgbEnum): number {
+        let localValue = 0, normalValue = 0
+        switch (refColor) {
+            case UmonsRgbEnum.RED: {
+                localValue = redValue
+                break
+            }
+            case UmonsRgbEnum.GREEN: {
+                localValue = greenValue
+                break
+            }
+            case UmonsRgbEnum.BLUE: {
+                localValue = blueValue
+                break
+            }
+            default: {
+                localValue = 0
+            }
+        }
+        normalValue = Math.round(localValue / clearValue * 255)
+        return normalValue
+    }
+
+    /**
+     * Ask for one component seen by the RGB sensor 
+     */
+    //% block
+    //% group="RGB"
+    export function componentPercentage (refColor:UmonsRgbEnum): number {
+        let localValue = 0
+        if (redValue+greenValue+blueValue==0) {
+            return 0
+        }
+        switch (refColor) {
+            case UmonsRgbEnum.RED: {
+                localValue = redValue
+                break
+            }
+            case UmonsRgbEnum.GREEN: {
+                localValue = greenValue
+                break
+            }
+            case UmonsRgbEnum.BLUE: {
+                localValue = blueValue
+                break
+            }
+            default: {
+                localValue = 0
+            }
+        }
+        return Math.round(localValue / (redValue+greenValue+blueValue))
+    }
+
     /**
      * Ask for the red component seen by the RGB sensor 
      */
