@@ -178,7 +178,9 @@ namespace umons {
         return cct
     }
 
-    function transformRgbToHsv(): void {
+    //% block
+    //% group="HSL"
+    export function transformRgbToHsv(): void {
         let rd=redValue/255
         let gd=greenValue/255
         let bd=blueValue/255
