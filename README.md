@@ -5,18 +5,10 @@
 
 This repository can be added as an **extension** in MakeCode.
 
-* open [https://makecode.adafruit.com/](https://makecode.adafruit.com/)
+* open [https://makecode.adafruit.com/beta](https://makecode.adafruit.com/beta)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu
 * search for **https://github.com/philippefortemps/pxt-umons-i2c-sensors** and import
-
-## Edit this project ![Build status badge](https://github.com/philippefortemps/pxt-umons-i2c-sensors/workflows/MakeCode/badge.svg)
-
-To edit this repository in MakeCode.
-
-* open [https://makecode.adafruit.com/](https://makecode.adafruit.com/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/philippefortemps/pxt-umons-i2c-sensors** and click import
 
 ## Blocks preview
 
