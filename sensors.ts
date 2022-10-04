@@ -86,11 +86,39 @@ namespace umons {
     }
     
     /**
-     * Ask for one component seen by the RGB sensor 
+     * Ask for one component intensity as seen by the RGB sensor 
      */
     //% block
     //% group="RGB"
-    export function componentIntensity (refColor:UmonsRgbEnum): number {
+    export function componentRawIntensity (refColor:UmonsRgbEnum): number {
+        let localValue = 0, normalValue = 0
+        switch (refColor) {
+            case UmonsRgbEnum.RED: {
+                localValue = redValue
+                break
+            }
+            case UmonsRgbEnum.GREEN: {
+                localValue = greenValue
+                break
+            }
+            case UmonsRgbEnum.BLUE: {
+                localValue = blueValue
+                break
+            }
+            default: {
+                localValue = 0
+            }
+        }
+        normalValue = localValue / clearValue
+        return Math.round(normalValue*255)
+    }
+
+    /**
+     * Ask for one component intensity as it would be seen by a human
+     */
+    //% block
+    //% group="RGB"
+    export function componentHumanIntensity (refColor:UmonsRgbEnum): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
             case UmonsRgbEnum.RED: {
@@ -115,15 +143,16 @@ namespace umons {
     }
 
     /**
-     * Ask for one component seen by the RGB sensor 
+     * Ask for one component percentage as seen by the RGB sensor 
      */
     //% block
     //% group="RGB"
     export function componentPercentage (refColor:UmonsRgbEnum): number {
-        let localValue = 0.0, localIntensity = 0.0
+        let localValue = 0.0, localIntensity = 0.0 
         if (redValue+greenValue+blueValue==0) {
             return 0
         }
+        let sumValue = (redValue+greenValue+blueValue)*1.0
         switch (refColor) {
             case UmonsRgbEnum.RED: {
                 localValue = redValue*1.0
@@ -141,9 +170,8 @@ namespace umons {
                 localValue = 0.0
             }
         }
-        localIntensity = localValue / (redValue+greenValue+blueValue)
-        return Math.round(localIntensity*100)/100
-        /* return Math.round(localValue / (redValue+greenValue+blueValue)) */
+        localIntensity = localValue / sumValue
+        return Math.round(localIntensity*1000)/1000
     }
 
     /**
