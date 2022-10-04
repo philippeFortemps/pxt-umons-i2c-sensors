@@ -37,9 +37,13 @@ namespace umons {
         switch(sensor) {
             case UmonsSensorEnum.RGB: {
                 // set integration time to 24ms
-                pins.i2cWriteRegister(rgbSensorAddress, 129, 246)
+                //pins.i2cWriteRegister(rgbSensorAddress, 129, 0xF6)
+                // set integration time to 50ms
+                pins.i2cWriteRegister(rgbSensorAddress, 129, 0xEB)
                 // set gain to 1
-                pins.i2cWriteRegister(rgbSensorAddress, 143,   0)
+                //pins.i2cWriteRegister(rgbSensorAddress, 143, 0x00)
+                // set gain to 1
+                pins.i2cWriteRegister(rgbSensorAddress, 143, 0x01)
                 // set integration delay to 50 ms
                 rgbIntegrationDelay = 50
                 break
