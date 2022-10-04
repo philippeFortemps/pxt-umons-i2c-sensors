@@ -109,8 +109,9 @@ namespace umons {
                 localValue = 0
             }
         }
-        normalValue = Math.round(localValue / clearValue * 255)
-        return normalValue
+        normalValue = localValue / clearValue
+        normalValue = Math.pow(normalValue, 2.5)
+        return Math.round(normalValue*255)
     }
 
     /**
