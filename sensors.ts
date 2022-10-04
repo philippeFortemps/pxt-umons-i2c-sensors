@@ -18,12 +18,18 @@ enum UmonsRgbEnum {
     //% block="blue"
     BLUE
 }
+
+// Parameters for the RGB I2C sensor
+class TCS34725 {
+    public static readonly address = 0x29;
+    private static readonly command = 0x80;
+    public static readonly atime = TCS34725.command | 0x01;
+}
 /**
  * UMONS blocks
  */
 //% weight=100 color=#bc0f74 icon="\uf043"
 namespace umons {
-    const rgbSensorAddress = 0x29
     let clearValue=0, redValue=0, greenValue=0, blueValue = 0
     let hValue=0, sValue=0, lValue=0
     let rgbIntegrationDelay=0
@@ -37,13 +43,13 @@ namespace umons {
         switch(sensor) {
             case UmonsSensorEnum.RGB: {
                 // set integration time to 24ms
-                //pins.i2cWriteRegister(rgbSensorAddress, 129, 0xF6)
+                //pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, 0xF6)
                 // set integration time to 50ms
-                pins.i2cWriteRegister(rgbSensorAddress, 129, 0xEB)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, 0xEB)
                 // set gain to 1
-                //pins.i2cWriteRegister(rgbSensorAddress, 143, 0x00)
+                //pins.i2cWriteRegister(TCS34725.address, 143, 0x00)
                 // set gain to 1
-                pins.i2cWriteRegister(rgbSensorAddress, 143, 0x01)
+                pins.i2cWriteRegister(TCS34725.address, 143, 0x01)
                 // set integration delay to 50 ms
                 rgbIntegrationDelay = 50
                 break
@@ -63,23 +69,23 @@ namespace umons {
                 let redL = 0, redH = 0
                 let greenL = 0, greenH = 0
                 let blueL = 0, blueH = 0
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   1)
+                pins.i2cWriteRegister(TCS34725.address, 128,   1)
                 pause(5)
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   3)
+                pins.i2cWriteRegister(TCS34725.address, 128,   3)
                 pause(rgbIntegrationDelay)
-                clearL = pins.i2cReadRegister(rgbSensorAddress, 148)
-                clearH = pins.i2cReadRegister(rgbSensorAddress, 149)
+                clearL = pins.i2cReadRegister(TCS34725.address, 148)
+                clearH = pins.i2cReadRegister(TCS34725.address, 149)
                 clearValue = clearH * 256 + clearL
-                redL = pins.i2cReadRegister(rgbSensorAddress, 150)
-                redH = pins.i2cReadRegister(rgbSensorAddress, 151)
+                redL = pins.i2cReadRegister(TCS34725.address, 150)
+                redH = pins.i2cReadRegister(TCS34725.address, 151)
                 redValue = redH * 256 + redL
-                greenL = pins.i2cReadRegister(rgbSensorAddress, 152)
-                greenH = pins.i2cReadRegister(rgbSensorAddress, 153)
+                greenL = pins.i2cReadRegister(TCS34725.address, 152)
+                greenH = pins.i2cReadRegister(TCS34725.address, 153)
                 greenValue = greenH * 256 + greenL
-                blueL = pins.i2cReadRegister(rgbSensorAddress, 154)
-                blueH = pins.i2cReadRegister(rgbSensorAddress, 155)
+                blueL = pins.i2cReadRegister(TCS34725.address, 154)
+                blueH = pins.i2cReadRegister(TCS34725.address, 155)
                 blueValue = blueH * 256 + blueL
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   0)
+                pins.i2cWriteRegister(TCS34725.address, 128,   0)
                 break
             }
         }
@@ -261,4 +267,10 @@ namespace umons {
     export function askSValue():number {
         return sValue
     }
+    //% block
+    //% group="HSL"
+    export function askSomeValue():number{
+        return TCS34725.atime
+    }
+
 }
