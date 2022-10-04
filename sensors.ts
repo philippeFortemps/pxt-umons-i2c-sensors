@@ -115,28 +115,30 @@ namespace umons {
     //% block
     //% group="RGB"
     export function componentPercentage (refColor:UmonsRgbEnum): number {
-        let localValue = 0
+        let localValue = 0.0, localIntensity = 0.0
         if (redValue+greenValue+blueValue==0) {
             return 0
         }
         switch (refColor) {
             case UmonsRgbEnum.RED: {
-                localValue = redValue
+                localValue = redValue*1.0
                 break
             }
             case UmonsRgbEnum.GREEN: {
-                localValue = greenValue
+                localValue = greenValue*1.0
                 break
             }
             case UmonsRgbEnum.BLUE: {
-                localValue = blueValue
+                localValue = blueValue*1.0
                 break
             }
             default: {
-                localValue = 0
+                localValue = 0.0
             }
         }
-        return Math.round(localValue / (redValue+greenValue+blueValue))
+        localIntensity = localValue / (redValue+greenValue+blueValue)
+        return Math.round(localIntensity*100)/100
+        /* return Math.round(localValue / (redValue+greenValue+blueValue)) */
     }
 
     /**
