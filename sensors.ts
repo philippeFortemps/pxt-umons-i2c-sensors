@@ -225,7 +225,7 @@ namespace umons {
      */
     //% block
     //% group="RGB"
-    export function kelvinTemperature (): number {
+    export function kelvinColorTemperature (): number {
         let X=0, Y=0, Z=0
         let xc=0,yc=0
         let nMcCamy=0
@@ -246,55 +246,60 @@ namespace umons {
         nMcCamy = (xc-0.3320)/(0.1858-yc)
         /* 4. Finally, compute the CCT */
         cct = 449.0*Math.pow(nMcCamy, 3) + 3525.0*Math.pow(nMcCamy, 2) + (6823.3*nMcCamy) + 5520.33
+        if (cct<0) {
+            return -1
+        }
         return Math.round(cct)
     }
 
-    //% block
-    //% group="HSL"
-    export function transformRgbToHsv(): void {
-        let rd=redValue/255
-        let gd=greenValue/255
-        let bd=blueValue/255
-        let maxd = Math.max(Math.max(rd, gd), bd) 
-        let mind = Math.min(Math.min(rd, gd), bd)
-        lValue = (maxd + mind) / 2
-        if (maxd == mind) {
-            hValue = 0
-            sValue = 0 // achromatic
-        } else {
-            let d = maxd - mind;
-            if (lValue>0.5) {
-                sValue = d / (2 - maxd - mind)
+    /*
+        //% block
+        //% group="HSL"
+        export function transformRgbToHsv(): void {
+            let rd=redValue/255
+            let gd=greenValue/255
+            let bd=blueValue/255
+            let maxd = Math.max(Math.max(rd, gd), bd) 
+            let mind = Math.min(Math.min(rd, gd), bd)
+            lValue = (maxd + mind) / 2
+            if (maxd == mind) {
+                hValue = 0
+                sValue = 0 // achromatic
             } else {
-                sValue = d / (maxd+mind)
-            }
-            if (maxd==rd) {
-                if (gd<bd) {
-                    hValue = (gd - bd) / d + 6            
+                let d = maxd - mind;
+                if (lValue>0.5) {
+                    sValue = d / (2 - maxd - mind)
                 } else {
-                    hValue = (gd - bd) / d
+                    sValue = d / (maxd+mind)
                 }
-            } else if (maxd == gd) {
-                hValue = (bd - rd) / d + 2
-            } else if (maxd == bd) {
-                hValue = (rd - gd) / d + 4;
+                if (maxd==rd) {
+                    if (gd<bd) {
+                        hValue = (gd - bd) / d + 6            
+                    } else {
+                        hValue = (gd - bd) / d
+                    }
+                } else if (maxd == gd) {
+                    hValue = (bd - rd) / d + 2
+                } else if (maxd == bd) {
+                    hValue = (rd - gd) / d + 4;
+                }
+                hValue /= 6;
             }
-            hValue /= 6;
         }
-    }
-    //% block
-    //% group="HSL"
-    export function askLValue():number {
-        return lValue
-    }
-    //% block
-    //% group="HSL"
-    export function askHValue():number {
-        return hValue
-    }
-    //% block
-    //% group="HSL"
-    export function askSValue():number {
-        return sValue
-    }
+        //% block
+        //% group="HSL"
+        export function askLValue():number {
+            return lValue
+        }
+        //% block
+        //% group="HSL"
+        export function askHValue():number {
+            return hValue
+        }
+        //% block
+        //% group="HSL"
+        export function askSValue():number {
+            return sValue
+        }
+    */
 }
