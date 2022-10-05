@@ -18,12 +18,40 @@ enum UmonsRgbEnum {
     //% block="blue"
     BLUE
 }
+
+// Parameters for the RGB I2C sensor
+class TCS34725 {
+    public static readonly address = 0x29;
+    public static readonly command = 0x80;
+    public static readonly atime = TCS34725.command | 0x01;
+    public static readonly control = TCS34725.command | 0x0F;
+    public static readonly cdataL = TCS34725.command | 0x14;
+    public static readonly cdataH = TCS34725.command | 0x15;
+    public static readonly rdataL = TCS34725.command | 0x16;
+    public static readonly rdataH = TCS34725.command | 0x17;
+    public static readonly gdataL = TCS34725.command | 0x18;
+    public static readonly gdataH = TCS34725.command | 0x19;
+    public static readonly bdataL = TCS34725.command | 0x1A;
+    public static readonly bdataH = TCS34725.command | 0x1B; 
+    public static readonly disable = 0x00; 
+    public static readonly enable_pon = 0x01;
+    public static readonly enable_aen = 0x02;  
+    public static readonly integrationTime_2_4ms = 0xFF;
+    public static readonly integrationTime__24ms = 0xF6;
+    public static readonly integrationTime__50ms = 0xEB;
+    public static readonly integrationTime_101ms = 0xD5;
+    public static readonly integrationTime_154ms = 0xC0;
+    public static readonly integrationTime_700ms = 0x00;
+    public static readonly gain__1X  = 0x00;
+    public static readonly gain__4X  = 0x01;
+    public static readonly gain_16X  = 0x02;
+    public static readonly gain_60X  = 0x03;
+}
 /**
  * UMONS blocks
  */
 //% weight=100 color=#bc0f74 icon="\uf043"
 namespace umons {
-    const rgbSensorAddress = 0x29
     let clearValue=0, redValue=0, greenValue=0, blueValue = 0
     let hValue=0, sValue=0, lValue=0
     let rgbIntegrationDelay=0
@@ -37,15 +65,23 @@ namespace umons {
         switch(sensor) {
             case UmonsSensorEnum.RGB: {
                 // set integration time to 24ms
-                //pins.i2cWriteRegister(rgbSensorAddress, 129, 0xF6)
+                /*
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__24ms)
+                    rgbIntegrationDelay = 30
+                */
                 // set integration time to 50ms
-                pins.i2cWriteRegister(rgbSensorAddress, 129, 0xEB)
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+                    rgbIntegrationDelay = 50
+                /* */
                 // set gain to 1
-                //pins.i2cWriteRegister(rgbSensorAddress, 143, 0x00)
-                // set gain to 1
-                pins.i2cWriteRegister(rgbSensorAddress, 143, 0x01)
-                // set integration delay to 50 ms
-                rgbIntegrationDelay = 50
+                /*
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                */
+                // set gain to 4
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+                /* */
                 break
             }
         }
@@ -63,23 +99,23 @@ namespace umons {
                 let redL = 0, redH = 0
                 let greenL = 0, greenH = 0
                 let blueL = 0, blueH = 0
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   1)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon)
                 pause(5)
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   3)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon|TCS34725.enable_aen)
                 pause(rgbIntegrationDelay)
-                clearL = pins.i2cReadRegister(rgbSensorAddress, 148)
-                clearH = pins.i2cReadRegister(rgbSensorAddress, 149)
-                clearValue = clearH * 256 + clearL
-                redL = pins.i2cReadRegister(rgbSensorAddress, 150)
-                redH = pins.i2cReadRegister(rgbSensorAddress, 151)
-                redValue = redH * 256 + redL
-                greenL = pins.i2cReadRegister(rgbSensorAddress, 152)
-                greenH = pins.i2cReadRegister(rgbSensorAddress, 153)
-                greenValue = greenH * 256 + greenL
-                blueL = pins.i2cReadRegister(rgbSensorAddress, 154)
-                blueH = pins.i2cReadRegister(rgbSensorAddress, 155)
-                blueValue = blueH * 256 + blueL
-                pins.i2cWriteRegister(rgbSensorAddress, 128,   0)
+                clearL = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataL)
+                clearH = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataH)
+                clearValue = (clearH <<8) | clearL
+                redL = pins.i2cReadRegister(TCS34725.address, TCS34725.rdataL)
+                redH = pins.i2cReadRegister(TCS34725.address, TCS34725.rdataH)
+                redValue = (redH <<8) | redL
+                greenL = pins.i2cReadRegister(TCS34725.address, TCS34725.gdataL)
+                greenH = pins.i2cReadRegister(TCS34725.address, TCS34725.gdataH)
+                greenValue = (greenH <<8) | greenL
+                blueL = pins.i2cReadRegister(TCS34725.address, TCS34725.bdataL)
+                blueH = pins.i2cReadRegister(TCS34725.address, TCS34725.bdataH)
+                blueValue = (blueH <<8) | blueL
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.disable)
                 break
             }
         }
@@ -171,7 +207,7 @@ namespace umons {
             }
         }
         localIntensity = localValue / sumValue
-        return Math.round(localIntensity*1000)/1000
+        return Math.roundWithPrecision(localIntensity, 3)
     }
 
     /**
@@ -182,7 +218,7 @@ namespace umons {
     export function luminanceIntensity (): number {
         let luminanceValue = 0
         luminanceValue = (-0.32466*redValue) + (1.57837*greenValue) + (-0.73191*blueValue);
-        return luminanceValue
+        return Math.round(luminanceValue)
     }
     /**
      * Ask for the Kelvin temperature seen by the RGB sensor 
@@ -206,11 +242,11 @@ namespace umons {
         /* 2. Calculate the chromacity coordinates */
         xc = X / (X+Y+Z)
         yc = Y / (X+Y+Z)
-        /* 3. Use McCamy's formula to determine the CT*/
+        /* 3. Use McCamy's formula to determine the CCT*/
         nMcCamy = (xc-0.3320)/(0.1858-yc)
-        /* 4. Finally, compute the cct */
-        cct = 449.0*Math.pow(nMcCamy, 3) + 3525.0*Math.pow(nMcCamy, 2) + 6823.3*nMcCamy+5520.33
-        return cct
+        /* 4. Finally, compute the CCT */
+        cct = 449.0*Math.pow(nMcCamy, 3) + 3525.0*Math.pow(nMcCamy, 2) + (6823.3*nMcCamy) + 5520.33
+        return Math.round(cct)
     }
 
     //% block
