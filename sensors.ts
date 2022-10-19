@@ -4,7 +4,7 @@
 enum UmonsSensorEnum {
     //% block="rgb sensor"
     RGB
-    /**
+    /** NEW SENSOR TO ADD
      * //% block="distance sensor"
      * DISTANCE
      */
