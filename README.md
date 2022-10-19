@@ -20,7 +20,7 @@ To operate the color sensor, you must
 ![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/pictures/pxt-umons-i2c-sensors-demo.png)
 
 Here, we reproduce the color measured through the leds integrated on the Playground Express module.
-Note that the sensor induces a bluish color, because of the led used to illuminate the measurements.
+Note that the sensor induces a bluish color, because of the led used to illuminate the measurements. This could be taken into account in your project.
 
 #### Metadata (used for search, rendering)
 
