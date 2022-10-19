@@ -21,3 +21,8 @@ To operate the color sensor, you must
 
 Here, we reproduce the color measured through the leds integrated on the Playground Express module.
 Note that the sensor induces a bluish color, because of the led used to illuminate the measurements.
+
+#### Metadata (used for search, rendering)
+
+* for PXT/adafruit
+<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
