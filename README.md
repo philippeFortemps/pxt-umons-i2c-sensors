@@ -12,14 +12,10 @@ This repository can be added as an **extension** in MakeCode.
 
 ## Blocks preview
 
-Pour faire fonctionner le capteur couleur, il faut
-* initialiser le capteur au démarrage
-* demander au capteur de faire une mesure
-* exploiter les valeurs disponibles au sujet de cette mesure
+To operate the color sensor, you must
+* initialize the sensor at startup
+* ask the sensor to make a measurement
+* exploit the available values about this measurement
 
 ![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/pictures/pxt-umons-i2c-sensors-demo.png)
 
-#### Metadata (used for search, rendering)
-
-* for PXT/adafruit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
