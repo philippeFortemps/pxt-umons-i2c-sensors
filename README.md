@@ -12,10 +12,10 @@ This repository can be added as an **extension** in MakeCode.
 
 ## Blocks preview
 
-This image shows the blocks code from the last commit in master.
-This image may take a few minutes to refresh...
-
-![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/.github/makecode/blocks.png)
+Pour faire fonctionner le capteur couleur, il faut
+* initialiser le capteur au démarrage
+* demander au capteur de faire une mesure
+* exploiter les valeurs disponibles au sujet de cette mesure
 
 ![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/pictures/pxt-umons-i2c-sensors-demo.png)
 
