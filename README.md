@@ -17,6 +17,8 @@ This image may take a few minutes to refresh...
 
 ![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/.github/makecode/blocks.png)
 
+![A rendered view of the blocks](https://github.com/philippefortemps/pxt-umons-i2c-sensors/raw/master/pictures/pxt-umons-i2c-sensors-demo.png)
+
 #### Metadata (used for search, rendering)
 
 * for PXT/adafruit
