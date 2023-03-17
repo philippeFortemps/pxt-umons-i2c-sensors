@@ -3,11 +3,10 @@
 // Enumeration of accepted sensors
 enum UmonsSensorEnum {
     //% block="rgb sensor"
-    RGB
-    /** NEW SENSOR TO ADD
-     * //% block="distance sensor"
-     * DISTANCE
-     */
+    RGB,
+    /** NEW SENSOR TO ADD */
+    //% block="distance sensor"
+    DISTANCE
     }
 // Enumeration of reference colors
 enum UmonsRgbEnum {
@@ -47,6 +46,27 @@ class TCS34725 {
     public static readonly gain_16X  = 0x02;
     public static readonly gain_60X  = 0x03;
 }
+
+// Parameters for the distance sensor
+class SEN0304 {
+    public static readonly address = 0x11;
+    public static readonly slaveaddr_index = 0;
+    public static readonly pid_index = 1;
+    public static readonly version_index = 2;
+    public static readonly dist_h_index = 3;
+    public static readonly dist_l_index = 4;
+    public static readonly temp_h_index = 5;
+    public static readonly temp_l_index = 6;
+    public static readonly cfg_index = 7;
+    public static readonly cmd_index = 8;
+    public static readonly reg_num = 9;
+    public static readonly mode_automatic = 0x80;
+    public static readonly mode_passive = 0x00;
+    public static readonly cmd_distance_measure = 0x01;
+    public static readonly rang_500 = 0x20;
+    public static readonly rang_300 = 0x10;
+    public static readonly rang_150 = 0x00;
+}
 /**
  * UMONS blocks
  */
@@ -54,6 +74,7 @@ class TCS34725 {
 namespace umons {
     let clearValue=0, redValue=0, greenValue=0, blueValue = 0
     let hValue=0, sValue=0, lValue=0
+    let tempValue=0, distValue=0
     let rgbIntegrationDelay=0
     /**
      * Initialize a sensor connected on I2C
@@ -82,6 +103,11 @@ namespace umons {
                 /* */
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
                 /* */
+                break
+            }
+            case UmonsSensorEnum.DISTANCE: {
+                // set mode range to AUTOMATIC 500
+                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
                 break
             }
         }
@@ -117,6 +143,16 @@ namespace umons {
                 blueValue = (blueH <<8) | blueL
                 pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.disable)
                 break
+            }
+            case UmonsSensorEnum.DISTANCE: {
+                let tempL=0, tempH=0
+                let distL=0, distH=0
+                tempL = pins.i2cReadRegister(SEN0304.address, SEN0304.temp_l_index)
+                tempH = pins.i2cReadRegister(SEN0304.address, SEN0304.temp_h_index)
+                tempValue = ((tempH <<8) | tempL)/10
+                distL = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_l_index)
+                distH = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_h_index)
+                distValue = ((distH <<8) | distL)
             }
         }
     }
@@ -302,4 +338,22 @@ namespace umons {
             return sValue
         }
     */
+    /**
+     * Ask for the last distance measure made by the distance sensor 
+     */
+    //% block
+    //% group="DISTANCE"
+    export function measuredDistance (): number {
+        return distValue
+    }
+    /**
+     * Ask for the last temperature measure made by the distance sensor 
+     */
+    //% block
+    //% group="DISTANCE"
+    export function measuredTemperature (): number {
+        return tempValue
+    }
+    
+
 }
