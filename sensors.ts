@@ -153,6 +153,10 @@ namespace umons {
                 distL = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_l_index)
                 distH = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_h_index)
                 distValue = ((distH <<8) | distL)
+                if (distValue>32767)
+                {
+                    distValue = distValue - 65536
+                }
             }
         }
     }
