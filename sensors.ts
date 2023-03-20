@@ -104,6 +104,28 @@ namespace umons {
     let tempValue=0, distValue=0
     let colorSensorIntegrationDelay=0
     /**
+     * Set the parameters for the COLOR sensor
+     * @param integrationTime duration of the integration, e.g.: 50 ms
+     * @param gainValue amplification gain of the sensor, e.g.: 4x
+     */
+    //% block
+    //% group="General"
+    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
+        // set integration time to 50ms
+        /* */
+        pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+        colorSensorIntegrationDelay = 50
+        /* */
+        // set gain to 1
+        /*
+            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+        */
+        // set gain to 4
+        /* */
+            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+        /* */
+    }
+    /**
      * Initialize a sensor connected on I2C
      * @param sensor kind of sensor connected to I2C, eg: COLOR
      */
@@ -187,28 +209,7 @@ namespace umons {
             }
         }
     }
-    /**
-     * Set the parameters for the COLOR sensor
-     * @param integrationTime duration of the integration, e.g.: 50 ms
-     * @param gainValue amplification gain of the sensor, e.g.: 4x
-     */
-    //% block
-    //% group="General"
-    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
-        // set integration time to 50ms
-        /* */
-        pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
-        colorSensorIntegrationDelay = 50
-        /* */
-        // set gain to 1
-        /*
-            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
-        */
-        // set gain to 4
-        /* */
-            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
-        /* */
-    }
+
 
     /**
      * Ask for one component intensity as seen by the COLOR sensor 
