@@ -192,6 +192,9 @@ namespace umons {
     
     /**
      * Set the parameters for the COLOR sensor
+     * 
+     * @param integrationTime duration of the integration, e.g.: 50 ms
+     * @param gainValue amplification gain of the sensor, e.g.: 4x
      */
     //% block
     //% group="COLOR"
@@ -210,6 +213,7 @@ namespace umons {
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
                 /* */
     }
+
     /**
      * Ask for one component intensity as seen by the COLOR sensor 
      */
