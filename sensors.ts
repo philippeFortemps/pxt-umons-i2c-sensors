@@ -6,7 +6,7 @@ enum UmonsSensorEnum {
     DISTANCE
     }
 // Enumeration of reference colors
-enum UmonsRGBEnum {
+enum UmonsRGBspace {
     //% block="red"
     RED,
     //% block="green"
@@ -215,18 +215,18 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentRawIntensity (refColor:UmonsRGBEnum): number {
+    export function colorComponentRawIntensity (refColor:UmonsRGBspace): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
-            case UmonsRGBEnum.RED: {
+            case UmonsRGBspace.RED: {
                 localValue = redValue
                 break
             }
-            case UmonsRGBEnum.GREEN: {
+            case UmonsRGBspace.GREEN: {
                 localValue = greenValue
                 break
             }
-            case UmonsRGBEnum.BLUE: {
+            case UmonsRGBspace.BLUE: {
                 localValue = blueValue
                 break
             }
@@ -243,18 +243,18 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentHumanIntensity (refColor:UmonsRGBEnum): number {
+    export function colorComponentHumanIntensity (refColor:UmonsRGBspace): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
-            case UmonsRGBEnum.RED: {
+            case UmonsRGBspace.RED: {
                 localValue = redValue
                 break
             }
-            case UmonsRGBEnum.GREEN: {
+            case UmonsRGBspace.GREEN: {
                 localValue = greenValue
                 break
             }
-            case UmonsRGBEnum.BLUE: {
+            case UmonsRGBspace.BLUE: {
                 localValue = blueValue
                 break
             }
@@ -272,22 +272,22 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentPercentage (refColor:UmonsRGBEnum): number {
+    export function colorComponentPercentage (refColor:UmonsRGBspace): number {
         let localValue = 0.0, localIntensity = 0.0 
         if (redValue+greenValue+blueValue==0) {
             return 0
         }
         let sumValue = (redValue+greenValue+blueValue)*1.0
         switch (refColor) {
-            case UmonsRGBEnum.RED: {
+            case UmonsRGBspace.RED: {
                 localValue = redValue*1.0
                 break
             }
-            case UmonsRGBEnum.GREEN: {
+            case UmonsRGBspace.GREEN: {
                 localValue = greenValue*1.0
                 break
             }
-            case UmonsRGBEnum.BLUE: {
+            case UmonsRGBspace.BLUE: {
                 localValue = blueValue*1.0
                 break
             }
