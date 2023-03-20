@@ -17,7 +17,7 @@ enum UmonsRGBEnum {
     BLUE
 }
 // Enumeration of integration time for the COLOR sensor
-enum UmonsRgbIntegrationTime{
+enum UmonsRgbIntegrationTime {
     //% block="2,4 ms"
     MS2,
     //% block="24 ms"
@@ -34,7 +34,7 @@ enum UmonsRgbIntegrationTime{
     MS600
 }
 // Enumeration of gain value for the COLOR sensor 
-enum UmonsRgbGainValue{
+enum UmonsRgbGainValue {
     //% block="1x"
     Gain1,
     //% block="4x"
@@ -189,29 +189,27 @@ namespace umons {
             }
         }
     }
-    
     /**
      * Set the parameters for the COLOR sensor
-     * 
      * @param integrationTime duration of the integration, e.g.: 50 ms
      * @param gainValue amplification gain of the sensor, e.g.: 4x
      */
     //% block
-    //% group="COLOR"
-    export function colorSensorParameters(integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
+    //% group="General"
+    export function colorSensorParameters (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
         // set integration time to 50ms
-                /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
-                    colorSensorIntegrationDelay = 50
-                /* */
-                // set gain to 1
-                /*
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
-                */
-                // set gain to 4
-                /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
-                /* */
+        /* */
+        pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+        colorSensorIntegrationDelay = 50
+        /* */
+        // set gain to 1
+        /*
+            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+        */
+        // set gain to 4
+        /* */
+            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+        /* */
     }
 
     /**
