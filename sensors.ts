@@ -16,6 +16,35 @@ enum UmonsRGBEnum {
     //% block="blue"
     BLUE
 }
+// Enumeration of integration time for the COLOR sensor
+enum UmonsRgbIntegrationTime{
+    //% block="2,4 ms"
+    MS2,
+    //% block="24 ms"
+    MS24,
+    //% block="50 ms"
+    MS50,
+    //% block="101 ms"
+    MS101,
+    //% block="154 ms"
+    MS154,
+    //% block="300 ms"
+    MS300,
+    //% block="600 ms"
+    MS600
+}
+// Enumeration of gain value for the COLOR sensor 
+enum UmonsRgbGainValue{
+    //% block="1x"
+    Gain1,
+    //% block="4x"
+    Gain4,
+    //% block="16x"
+    Gain16,
+    //% block="60x"
+    Gain60
+}
+
 
 // Parameters for the COLOR I2C sensor
 class TCS34725 {
@@ -37,9 +66,10 @@ class TCS34725 {
     public static readonly integrationTime_2_4ms = 0xFF;
     public static readonly integrationTime__24ms = 0xF6;
     public static readonly integrationTime__50ms = 0xEB;
-    public static readonly integrationTime_101ms = 0xD5;
+    public static readonly integrationTime_101ms = 0xD6;
     public static readonly integrationTime_154ms = 0xC0;
-    public static readonly integrationTime_700ms = 0x00;
+    public static readonly integrationTime_300ms = 0x83;
+    public static readonly integrationTime_600ms = 0x06;
     public static readonly gain__1X  = 0x00;
     public static readonly gain__4X  = 0x01;
     public static readonly gain_16X  = 0x02;
@@ -160,6 +190,26 @@ namespace umons {
         }
     }
     
+    /**
+     * Set the parameters for the COLOR sensor
+     */
+    //% block
+    //% group="COLOR"
+    export function colorSensorParameters(integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
+        // set integration time to 50ms
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+                    colorSensorIntegrationDelay = 50
+                /* */
+                // set gain to 1
+                /*
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                */
+                // set gain to 4
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+                /* */
+    }
     /**
      * Ask for one component intensity as seen by the COLOR sensor 
      */
