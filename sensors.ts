@@ -2,14 +2,13 @@
 
 // Enumeration of accepted sensors
 enum UmonsSensorEnum {
-    //% block="rgb sensor"
-    RGB,
-    /** NEW SENSOR TO ADD */
+    //% block="color sensor"
+    COLOR,
     //% block="distance sensor"
     DISTANCE
     }
 // Enumeration of reference colors
-enum UmonsRgbEnum {
+enum UmonsRGBEnum {
     //% block="red"
     RED,
     //% block="green"
@@ -18,7 +17,7 @@ enum UmonsRgbEnum {
     BLUE
 }
 
-// Parameters for the RGB I2C sensor
+// Parameters for the COLOR I2C sensor
 class TCS34725 {
     public static readonly address = 0x29;
     public static readonly command = 0x80;
@@ -47,7 +46,7 @@ class TCS34725 {
     public static readonly gain_60X  = 0x03;
 }
 
-// Parameters for the distance sensor
+// Parameters for the DISTANCE I2C sensor
 class SEN0304 {
     public static readonly address = 0x11;
     public static readonly slaveaddr_index = 0;
@@ -75,25 +74,25 @@ namespace umons {
     let clearValue=0, redValue=0, greenValue=0, blueValue = 0
     let hValue=0, sValue=0, lValue=0
     let tempValue=0, distValue=0
-    let rgbIntegrationDelay=0
+    let colorSensorIntegrationDelay=0
     /**
      * Initialize a sensor connected on I2C
-     * @param sensor kind of sensor connected to I2C, eg: RGB
+     * @param sensor kind of sensor connected to I2C, eg: COLOR
      */
     //% block
     //% group="General"
     export function initI2cSensor (sensor:UmonsSensorEnum): void {
         switch(sensor) {
-            case UmonsSensorEnum.RGB: {
+            case UmonsSensorEnum.COLOR: {
                 // set integration time to 24ms
                 /*
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__24ms)
-                    rgbIntegrationDelay = 30
+                    colorSensorIntegrationDelay = 30
                 */
                 // set integration time to 50ms
                 /* */
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
-                    rgbIntegrationDelay = 50
+                    colorSensorIntegrationDelay = 50
                 /* */
                 // set gain to 1
                 /*
@@ -114,13 +113,13 @@ namespace umons {
     }
     /**
      * Read a measurement on a sensor connected on I2C
-     * @param sensor kind of sensor connected to I2C, eg: RGB
+     * @param sensor kind of sensor connected to I2C, eg: COLOR
      */
     //% block
     //% group="General"
     export function readI2cSensor (sensor:UmonsSensorEnum): void {
         switch(sensor) {
-            case UmonsSensorEnum.RGB: {
+            case UmonsSensorEnum.COLOR: {
                 let clearL = 0, clearH = 0
                 let redL = 0, redH = 0
                 let greenL = 0, greenH = 0
@@ -128,7 +127,7 @@ namespace umons {
                 pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon)
                 pause(5)
                 pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon|TCS34725.enable_aen)
-                pause(rgbIntegrationDelay)
+                pause(colorSensorIntegrationDelay)
                 clearL = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataL)
                 clearH = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataH)
                 clearValue = (clearH <<8) | clearL
@@ -162,22 +161,22 @@ namespace umons {
     }
     
     /**
-     * Ask for one component intensity as seen by the RGB sensor 
+     * Ask for one component intensity as seen by the COLOR sensor 
      */
     //% block
-    //% group="RGB"
-    export function componentRawIntensity (refColor:UmonsRgbEnum): number {
+    //% group="COLOR"
+    export function colorComponentRawIntensity (refColor:UmonsRGBEnum): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
-            case UmonsRgbEnum.RED: {
+            case UmonsRGBEnum.RED: {
                 localValue = redValue
                 break
             }
-            case UmonsRgbEnum.GREEN: {
+            case UmonsRGBEnum.GREEN: {
                 localValue = greenValue
                 break
             }
-            case UmonsRgbEnum.BLUE: {
+            case UmonsRGBEnum.BLUE: {
                 localValue = blueValue
                 break
             }
@@ -193,19 +192,19 @@ namespace umons {
      * Ask for one component intensity as it would be seen by a human
      */
     //% block
-    //% group="RGB"
-    export function componentHumanIntensity (refColor:UmonsRgbEnum): number {
+    //% group="COLOR"
+    export function colorComponentHumanIntensity (refColor:UmonsRGBEnum): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
-            case UmonsRgbEnum.RED: {
+            case UmonsRGBEnum.RED: {
                 localValue = redValue
                 break
             }
-            case UmonsRgbEnum.GREEN: {
+            case UmonsRGBEnum.GREEN: {
                 localValue = greenValue
                 break
             }
-            case UmonsRgbEnum.BLUE: {
+            case UmonsRGBEnum.BLUE: {
                 localValue = blueValue
                 break
             }
@@ -219,26 +218,26 @@ namespace umons {
     }
 
     /**
-     * Ask for one component percentage as seen by the RGB sensor 
+     * Ask for one component percentage as seen by the COLOR sensor 
      */
     //% block
-    //% group="RGB"
-    export function componentPercentage (refColor:UmonsRgbEnum): number {
+    //% group="COLOR"
+    export function colorComponentPercentage (refColor:UmonsRGBEnum): number {
         let localValue = 0.0, localIntensity = 0.0 
         if (redValue+greenValue+blueValue==0) {
             return 0
         }
         let sumValue = (redValue+greenValue+blueValue)*1.0
         switch (refColor) {
-            case UmonsRgbEnum.RED: {
+            case UmonsRGBEnum.RED: {
                 localValue = redValue*1.0
                 break
             }
-            case UmonsRgbEnum.GREEN: {
+            case UmonsRGBEnum.GREEN: {
                 localValue = greenValue*1.0
                 break
             }
-            case UmonsRgbEnum.BLUE: {
+            case UmonsRGBEnum.BLUE: {
                 localValue = blueValue*1.0
                 break
             }
@@ -251,21 +250,21 @@ namespace umons {
     }
 
     /**
-     * Ask for the luminance intensity seen by the RGB sensor
+     * Ask for the luminance intensity seen by the COLOR sensor
      */
     //% block
-    //% group="RGB"
-    export function luminanceIntensity (): number {
+    //% group="COLOR"
+    export function colorLuminanceIntensity (): number {
         let luminanceValue = 0
         luminanceValue = (-0.32466*redValue) + (1.57837*greenValue) + (-0.73191*blueValue);
         return Math.round(luminanceValue)
     }
     /**
-     * Ask for the Kelvin temperature seen by the RGB sensor 
+     * Ask for the Kelvin temperature seen by the COLOR sensor 
      */
     //% block
-    //% group="RGB"
-    export function kelvinColorTemperature (): number {
+    //% group="COLOR"
+    export function colorKelvinTemperature (): number {
         let X=0, Y=0, Z=0
         let xc=0,yc=0
         let nMcCamy=0
