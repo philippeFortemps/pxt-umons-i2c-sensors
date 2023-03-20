@@ -1,10 +1,8 @@
-// Add your code here
-
 // Enumeration of accepted sensors
 enum UmonsSensorEnum {
-    //% block="color sensor"
+    //% block="color TCS34725"
     COLOR,
-    //% block="distance sensor"
+    //% block="distance SEN0304"
     DISTANCE
     }
 // Enumeration of reference colors
@@ -18,30 +16,30 @@ enum UmonsRGBEnum {
 }
 // Enumeration of integration time for the COLOR sensor
 enum UmonsRgbIntegrationTime {
-    //% block="2,4 ms"
+    //% block="integration time 2,4 ms"
     MS2,
-    //% block="24 ms"
+    //% block="integration time 24 ms"
     MS24,
-    //% block="50 ms"
+    //% block="integration time 50 ms"
     MS50,
-    //% block="101 ms"
+    //% block="integration time 101 ms"
     MS101,
-    //% block="154 ms"
+    //% block="integration time 154 ms"
     MS154,
-    //% block="300 ms"
+    //% block="integration time 300 ms"
     MS300,
-    //% block="600 ms"
+    //% block="integration time 600 ms"
     MS600
 }
 // Enumeration of gain value for the COLOR sensor 
 enum UmonsRgbGainValue {
-    //% block="1x"
+    //% block="and gain 1x"
     Gain1,
-    //% block="4x"
+    //% block="and gain 4x"
     Gain4,
-    //% block="16x"
+    //% block="and gain 16x"
     Gain16,
-    //% block="60x"
+    //% block="and gain 60x"
     Gain60
 }
 
@@ -196,7 +194,7 @@ namespace umons {
      */
     //% block
     //% group="General"
-    export function colorSensorParameters (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
+    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
         // set integration time to 50ms
         /* */
         pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
