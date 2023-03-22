@@ -16,31 +16,40 @@ enum UmonsRGBspace {
 }
 // Enumeration of integration time for the COLOR sensor
 enum UmonsRgbIntegrationTime {
-    //% block="integration time 2,4 ms"
+    //% block="2.4ms"
     MS2,
-    //% block="integration time 24 ms"
+    //% block="24ms"
     MS24,
-    //% block="integration time 50 ms"
+    //% block="50ms"
     MS50,
-    //% block="integration time 101 ms"
+    //% block="101ms"
     MS101,
-    //% block="integration time 154 ms"
+    //% block="154ms"
     MS154,
-    //% block="integration time 300 ms"
+    //% block="300ms"
     MS300,
-    //% block="integration time 600 ms"
+    //% block="600ms"
     MS600
 }
 // Enumeration of gain value for the COLOR sensor 
 enum UmonsRgbGainValue {
-    //% block="and gain 1x"
+    //% block="1x"
     Gain1,
-    //% block="and gain 4x"
+    //% block="4x"
     Gain4,
-    //% block="and gain 16x"
+    //% block="16x"
     Gain16,
-    //% block="and gain 60x"
+    //% block="60x"
     Gain60
+}
+// Enumeration of range value for the DISTANCe sensor 
+enum UmonsDistanceRangeValue {
+    //% block="150cm"
+    Range150,
+    //% block="300cm"
+    Range300,
+    //% block="500cm"
+    Range500
 }
 
 
@@ -103,60 +112,44 @@ namespace umons {
     let hValue=0, sValue=0, lValue=0
     let tempValue=0, distValue=0
     let colorSensorIntegrationDelay=0
-    /**
-     * Set the parameters for the COLOR sensor
-     * @param integrationTime duration of the integration, e.g.: 50 ms
-     * @param gainValue amplification gain of the sensor, e.g.: 4x
-     */
-    //% block
-    //% group="General"
-    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, gainValue:UmonsRgbGainValue): void {
-        // set integration time to 50ms
-        /* */
-        pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
-        colorSensorIntegrationDelay = 50
-        /* */
-        // set gain to 1
-        /*
-            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
-        */
-        // set gain to 4
-        /* */
-            pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
-        /* */
-    }
+
     /**
      * Initialize a sensor connected on I2C
      * @param sensor kind of sensor connected to I2C, eg: COLOR
      */
-    //% block
+    //% block="initialize the $sensor I2C sensor"
     //% group="General"
+    //% weight=100
     export function initI2cSensor (sensor:UmonsSensorEnum): void {
         switch(sensor) {
             case UmonsSensorEnum.COLOR: {
+                // set integration time to 50ms
+                // set gain to 4
+                setColorSensorParametersTo(UmonsRgbIntegrationTime.MS50, UmonsRgbGainValue.Gain4)
                 // set integration time to 24ms
                 /*
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__24ms)
                     colorSensorIntegrationDelay = 30
                 */
                 // set integration time to 50ms
-                /* */
+                /* 
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
                     colorSensorIntegrationDelay = 50
-                /* */
+                */
                 // set gain to 1
                 /*
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
                 */
                 // set gain to 4
-                /* */
+                /* 
                     pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
-                /* */
+                */
                 break
             }
             case UmonsSensorEnum.DISTANCE: {
                 // set mode range to AUTOMATIC 500
-                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
+                setDistanceSensorParameterTo(UmonsDistanceRangeValue.Range500)
+                // pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
                 break
             }
         }
@@ -165,8 +158,9 @@ namespace umons {
      * Read a measurement on a sensor connected on I2C
      * @param sensor kind of sensor connected to I2C, eg: COLOR
      */
-    //% block
+    //% block="make a measure on the $sensor I2C sensor"
     //% group="General"
+    //% weight=40
     export function readI2cSensor (sensor:UmonsSensorEnum): void {
         switch(sensor) {
             case UmonsSensorEnum.COLOR: {
@@ -209,8 +203,113 @@ namespace umons {
             }
         }
     }
+    /**
+     * Set the parameters for the COLOR sensor
+     * @param integrationTime duration of the integration, e.g.: 50 ms
+     * @param gainValue amplification gain of the sensor, e.g.: 4x
+     */
+    //% block="set color I2C sensor parameters|     > integration time to $integrationTime     > gain value to $gainValue"
+    //% group="COLOR"
+    //% inlineInputMode=external
+    //% weight=20
+    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, 
+                                                gainValue:UmonsRgbGainValue): void {
 
-
+        switch (integrationTime) {
+            case UmonsRgbIntegrationTime.MS2: {
+                // set integration time to 2.4ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime_2_4ms)
+                colorSensorIntegrationDelay = 5
+                break
+            }
+            case UmonsRgbIntegrationTime.MS24: {
+                // set integration time to 24ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__24ms)
+                colorSensorIntegrationDelay = 30
+                break
+            }
+            case UmonsRgbIntegrationTime.MS50: {
+                // set integration time to 50ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+                colorSensorIntegrationDelay = 50
+                break
+            }
+            case UmonsRgbIntegrationTime.MS101: {
+                // set integration time to 101ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime_101ms)
+                colorSensorIntegrationDelay = 101
+                break
+            }
+            case UmonsRgbIntegrationTime.MS154: {
+                // set integration time to 154ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime_154ms)
+                colorSensorIntegrationDelay = 155
+                break
+            }
+            case UmonsRgbIntegrationTime.MS300: {
+                // set integration time to 300ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime_300ms)
+                colorSensorIntegrationDelay = 300
+                break
+            }
+            case UmonsRgbIntegrationTime.MS600: {
+                // set integration time to 600ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime_600ms)
+                colorSensorIntegrationDelay = 600
+                break
+            }
+            default: {
+                // set integration time to 50ms
+                /* */
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
+                colorSensorIntegrationDelay = 50
+                /* */
+            }
+        }
+        switch (gainValue) {
+            case UmonsRgbGainValue.Gain1: {
+                // set gain to 1
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                /* */
+                break
+            }
+            case UmonsRgbGainValue.Gain4: {
+                // set gain to 4
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+                /* */
+                break
+            }
+            case UmonsRgbGainValue.Gain16: {
+                // set gain to 16
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_16X)
+                /* */
+                break
+            }
+            case UmonsRgbGainValue.Gain60: {
+                // set gain to 60
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_60X)
+                /* */
+                break
+            }
+            default: {
+                // set gain to 1
+                /* */
+                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                /* */
+            }
+        }
+    }
     /**
      * Ask for one component intensity as seen by the COLOR sensor 
      */
@@ -397,6 +496,7 @@ namespace umons {
      */
     //% block
     //% group="DISTANCE"
+    //% weight=20
     export function measuredDistance (): number {
         return distValue
     }
@@ -405,8 +505,44 @@ namespace umons {
      */
     //% block
     //% group="DISTANCE"
+    //% weight=10
     export function measuredTemperature (): number {
         return tempValue
+    }
+    //% block="set distance I2C sensor parameters|     > distance value to $rangeValue"
+    //% group="DISTANCE"
+    //% inlineInputMode=external
+    //% weight=2
+    export function setDistanceSensorParameterTo (rangeValue:UmonsDistanceRangeValue): void {
+        switch (rangeValue) {
+            case UmonsDistanceRangeValue.Range150: {
+                /* */
+                // set range value to 150cm in automatic mode
+                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_150)
+                /* */
+                break
+            }
+            case UmonsDistanceRangeValue.Range300: {
+                /* */
+                // set range value to 300cm in automatic mode
+                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_300)
+                /* */
+                break
+            }
+            case UmonsDistanceRangeValue.Range500: {
+                /* */
+                // set range value to 500cm in automatic mode
+                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
+                /* */
+                break
+            }
+            default: {
+                /* */
+                // set range value to 500cm in automatic mode
+                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
+                /* */
+            }
+        }
     }
     
 
