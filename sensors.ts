@@ -4,7 +4,7 @@ enum UmonsSensorEnum {
     COLOR,
     //% block="distance SEN0304"
     DISTANCE
-    }
+}
 // Enumeration of reference colors
 enum UmonsRGBspace {
     //% block="red"
@@ -66,21 +66,21 @@ class TCS34725 {
     public static readonly gdataL = TCS34725.command | 0x18;
     public static readonly gdataH = TCS34725.command | 0x19;
     public static readonly bdataL = TCS34725.command | 0x1A;
-    public static readonly bdataH = TCS34725.command | 0x1B; 
-    public static readonly disable = 0x00; 
+    public static readonly bdataH = TCS34725.command | 0x1B;
+    public static readonly disable = 0x00;
     public static readonly enable_pon = 0x01;
-    public static readonly enable_aen = 0x02;  
+    public static readonly enable_aen = 0x02;
     public static readonly integrationTime_2_4ms = 0xFF;
     public static readonly integrationTime__24ms = 0xF6;
     public static readonly integrationTime__50ms = 0xEB;
-    public static readonly integrationTime_101ms = 0xD6;
+    public static readonly integrationTime_101ms = 0xD5;
     public static readonly integrationTime_154ms = 0xC0;
     public static readonly integrationTime_300ms = 0x83;
     public static readonly integrationTime_600ms = 0x06;
-    public static readonly gain__1X  = 0x00;
-    public static readonly gain__4X  = 0x01;
-    public static readonly gain_16X  = 0x02;
-    public static readonly gain_60X  = 0x03;
+    public static readonly gain__1X = 0x00;
+    public static readonly gain__4X = 0x01;
+    public static readonly gain_16X = 0x02;
+    public static readonly gain_60X = 0x03;
 }
 
 // Parameters for the DISTANCE I2C sensor
@@ -108,10 +108,10 @@ class SEN0304 {
  */
 //% weight=100 color=#bc0f74 icon="\uf043"
 namespace umons {
-    let clearValue=0, redValue=0, greenValue=0, blueValue = 0
-    let hValue=0, sValue=0, lValue=0
-    let tempValue=0, distValue=0
-    let colorSensorIntegrationDelay=0
+    let clearValue = 0, redValue = 0, greenValue = 0, blueValue = 0
+    let hValue = 0, sValue = 0, lValue = 0
+    let tempValue = 0, distValue = 0
+    let colorSensorIntegrationDelay = 0
 
     /**
      * Initialize a sensor connected on I2C
@@ -120,30 +120,12 @@ namespace umons {
     //% block="initialize the $sensor I2C sensor"
     //% group="General"
     //% weight=100
-    export function initI2cSensor (sensor:UmonsSensorEnum): void {
-        switch(sensor) {
+    export function initI2cSensor(sensor: UmonsSensorEnum): void {
+        switch (sensor) {
             case UmonsSensorEnum.COLOR: {
                 // set integration time to 50ms
-                // set gain to 4
-                setColorSensorParametersTo(UmonsRgbIntegrationTime.MS50, UmonsRgbGainValue.Gain4)
-                // set integration time to 24ms
-                /*
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__24ms)
-                    colorSensorIntegrationDelay = 30
-                */
-                // set integration time to 50ms
-                /* 
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.atime, TCS34725.integrationTime__50ms)
-                    colorSensorIntegrationDelay = 50
-                */
                 // set gain to 1
-                /*
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
-                */
-                // set gain to 4
-                /* 
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
-                */
+                setColorSensorParametersTo(UmonsRgbIntegrationTime.MS50, UmonsRgbGainValue.Gain1)
                 break
             }
             case UmonsSensorEnum.DISTANCE: {
@@ -161,8 +143,8 @@ namespace umons {
     //% block="make a measure on the $sensor I2C sensor"
     //% group="General"
     //% weight=40
-    export function readI2cSensor (sensor:UmonsSensorEnum): void {
-        switch(sensor) {
+    export function readI2cSensor(sensor: UmonsSensorEnum): void {
+        switch (sensor) {
             case UmonsSensorEnum.COLOR: {
                 let clearL = 0, clearH = 0
                 let redL = 0, redH = 0
@@ -170,34 +152,33 @@ namespace umons {
                 let blueL = 0, blueH = 0
                 pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon)
                 pause(5)
-                pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon|TCS34725.enable_aen)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.enable_pon | TCS34725.enable_aen)
                 pause(colorSensorIntegrationDelay)
                 clearL = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataL)
                 clearH = pins.i2cReadRegister(TCS34725.address, TCS34725.cdataH)
-                clearValue = (clearH <<8) | clearL
+                clearValue = (clearH << 8) | clearL
                 redL = pins.i2cReadRegister(TCS34725.address, TCS34725.rdataL)
                 redH = pins.i2cReadRegister(TCS34725.address, TCS34725.rdataH)
-                redValue = (redH <<8) | redL
+                redValue = (redH << 8) | redL
                 greenL = pins.i2cReadRegister(TCS34725.address, TCS34725.gdataL)
                 greenH = pins.i2cReadRegister(TCS34725.address, TCS34725.gdataH)
-                greenValue = (greenH <<8) | greenL
+                greenValue = (greenH << 8) | greenL
                 blueL = pins.i2cReadRegister(TCS34725.address, TCS34725.bdataL)
                 blueH = pins.i2cReadRegister(TCS34725.address, TCS34725.bdataH)
-                blueValue = (blueH <<8) | blueL
+                blueValue = (blueH << 8) | blueL
                 pins.i2cWriteRegister(TCS34725.address, TCS34725.command, TCS34725.disable)
                 break
             }
             case UmonsSensorEnum.DISTANCE: {
-                let tempL=0, tempH=0
-                let distL=0, distH=0
+                let tempL = 0, tempH = 0
+                let distL = 0, distH = 0
                 tempL = pins.i2cReadRegister(SEN0304.address, SEN0304.temp_l_index)
                 tempH = pins.i2cReadRegister(SEN0304.address, SEN0304.temp_h_index)
-                tempValue = ((tempH <<8) | tempL)/10
+                tempValue = ((tempH << 8) | tempL) / 10
                 distL = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_l_index)
                 distH = pins.i2cReadRegister(SEN0304.address, SEN0304.dist_h_index)
-                distValue = ((distH <<8) | distL)
-                if (distValue>32767)
-                {
+                distValue = ((distH << 8) | distL)
+                if (distValue > 32767) {
                     distValue = distValue - 65536
                 }
             }
@@ -212,8 +193,8 @@ namespace umons {
     //% group="COLOR"
     //% inlineInputMode=external
     //% weight=20
-    export function setColorSensorParametersTo (integrationTime:UmonsRgbIntegrationTime, 
-                                                gainValue:UmonsRgbGainValue): void {
+    export function setColorSensorParametersTo(integrationTime: UmonsRgbIntegrationTime,
+        gainValue: UmonsRgbGainValue): void {
 
         switch (integrationTime) {
             case UmonsRgbIntegrationTime.MS2: {
@@ -277,35 +258,35 @@ namespace umons {
             case UmonsRgbGainValue.Gain1: {
                 // set gain to 1
                 /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
                 /* */
                 break
             }
             case UmonsRgbGainValue.Gain4: {
                 // set gain to 4
                 /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__4X)
                 /* */
                 break
             }
             case UmonsRgbGainValue.Gain16: {
                 // set gain to 16
                 /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_16X)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_16X)
                 /* */
                 break
             }
             case UmonsRgbGainValue.Gain60: {
                 // set gain to 60
                 /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_60X)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain_60X)
                 /* */
                 break
             }
             default: {
                 // set gain to 1
                 /* */
-                    pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
+                pins.i2cWriteRegister(TCS34725.address, TCS34725.control, TCS34725.gain__1X)
                 /* */
             }
         }
@@ -315,7 +296,7 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentRawIntensity (refColor:UmonsRGBspace): number {
+    export function colorComponentRawIntensity(refColor: UmonsRGBspace): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
             case UmonsRGBspace.RED: {
@@ -335,7 +316,7 @@ namespace umons {
             }
         }
         normalValue = localValue / clearValue
-        return Math.round(normalValue*255)
+        return Math.round(normalValue * 255)
     }
 
     /**
@@ -343,7 +324,7 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentHumanIntensity (refColor:UmonsRGBspace): number {
+    export function colorComponentHumanIntensity(refColor: UmonsRGBspace): number {
         let localValue = 0, normalValue = 0
         switch (refColor) {
             case UmonsRGBspace.RED: {
@@ -364,7 +345,7 @@ namespace umons {
         }
         normalValue = localValue / clearValue
         normalValue = Math.pow(normalValue, 2.5)
-        return Math.round(normalValue*255)
+        return Math.round(normalValue * 255)
     }
 
     /**
@@ -372,23 +353,23 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorComponentPercentage (refColor:UmonsRGBspace): number {
-        let localValue = 0.0, localIntensity = 0.0 
-        if (redValue+greenValue+blueValue==0) {
+    export function colorComponentPercentage(refColor: UmonsRGBspace): number {
+        let localValue = 0.0, localIntensity = 0.0
+        if (redValue + greenValue + blueValue == 0) {
             return 0
         }
-        let sumValue = (redValue+greenValue+blueValue)*1.0
+        let sumValue = (redValue + greenValue + blueValue) * 1.0
         switch (refColor) {
             case UmonsRGBspace.RED: {
-                localValue = redValue*1.0
+                localValue = redValue * 1.0
                 break
             }
             case UmonsRGBspace.GREEN: {
-                localValue = greenValue*1.0
+                localValue = greenValue * 1.0
                 break
             }
             case UmonsRGBspace.BLUE: {
-                localValue = blueValue*1.0
+                localValue = blueValue * 1.0
                 break
             }
             default: {
@@ -404,9 +385,9 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorLuminanceIntensity (): number {
+    export function colorLuminanceIntensity(): number {
         let luminanceValue = 0
-        luminanceValue = (-0.32466*redValue) + (1.57837*greenValue) + (-0.73191*blueValue);
+        luminanceValue = (-0.32466 * redValue) + (1.57837 * greenValue) + (-0.73191 * blueValue);
         return Math.round(luminanceValue)
     }
     /**
@@ -414,28 +395,29 @@ namespace umons {
      */
     //% block
     //% group="COLOR"
-    export function colorKelvinTemperature (): number {
-        let X=0, Y=0, Z=0
-        let xc=0,yc=0
-        let nMcCamy=0
+    export function colorKelvinTemperature(): number {
+        let X = 0, Y = 0, Z = 0
+        let xc = 0, yc = 0
+        let nMcCamy = 0
         let cct = 0
-        
-        if (redValue+greenValue+blueValue==0) {
+
+        if (redValue + greenValue + blueValue == 0) {
             return 0
         }
         /* 1. Map RGB values to their XYZ counterparts. */
         /* Note: Y = Luminance */
-        X = -0.14282*redValue + 1.54924*greenValue - 0.95641*blueValue
-        Y = -0.32466*redValue + 1.57837*greenValue - 0.73191*blueValue
-        Z = -0.68202*redValue + 0.77073*greenValue + 0.56332*blueValue
+        X = -0.14282 * redValue + 1.54924 * greenValue - 0.95641 * blueValue
+        Y = -0.32466 * redValue + 1.57837 * greenValue - 0.73191 * blueValue
+        Z = -0.68202 * redValue + 0.77073 * greenValue + 0.56332 * blueValue
         /* 2. Calculate the chromacity coordinates */
-        xc = X / (X+Y+Z)
-        yc = Y / (X+Y+Z)
+        xc = X / (X + Y + Z)
+        yc = Y / (X + Y + Z)
         /* 3. Use McCamy's formula to determine the CCT*/
-        nMcCamy = (xc-0.3320)/(0.1858-yc)
+        nMcCamy = (xc - 0.3320) / (0.1858 - yc)
         /* 4. Finally, compute the CCT */
-        cct = 449.0*Math.pow(nMcCamy, 3) + 3525.0*Math.pow(nMcCamy, 2) + (6823.3*nMcCamy) + 5520.33
-        if (cct<0) {
+        //cct = 449.0 * Math.pow(nMcCamy, 3) + 3525.0 * Math.pow(nMcCamy, 2) + (6823.3 * nMcCamy) + 5520.33
+        cct = ((449.0 * nMcCamy + 3525.0) * nMcCamy + 6823.3) * nMcCamy + 5520.33
+        if (cct < 0) {
             return -1
         }
         return Math.round(cct)
@@ -497,7 +479,7 @@ namespace umons {
     //% block
     //% group="DISTANCE"
     //% weight=20
-    export function measuredDistance (): number {
+    export function measuredDistance(): number {
         return distValue
     }
     /**
@@ -506,44 +488,44 @@ namespace umons {
     //% block
     //% group="DISTANCE"
     //% weight=10
-    export function measuredTemperature (): number {
+    export function measuredTemperature(): number {
         return tempValue
     }
     //% block="set distance I2C sensor parameters|     > distance value to $rangeValue"
     //% group="DISTANCE"
     //% inlineInputMode=external
     //% weight=2
-    export function setDistanceSensorParameterTo (rangeValue:UmonsDistanceRangeValue): void {
+    export function setDistanceSensorParameterTo(rangeValue: UmonsDistanceRangeValue): void {
         switch (rangeValue) {
             case UmonsDistanceRangeValue.Range150: {
                 /* */
                 // set range value to 150cm in automatic mode
-                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_150)
+                pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic | SEN0304.rang_150)
                 /* */
                 break
             }
             case UmonsDistanceRangeValue.Range300: {
                 /* */
                 // set range value to 300cm in automatic mode
-                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_300)
+                pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic | SEN0304.rang_300)
                 /* */
                 break
             }
             case UmonsDistanceRangeValue.Range500: {
                 /* */
                 // set range value to 500cm in automatic mode
-                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
+                pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic | SEN0304.rang_500)
                 /* */
                 break
             }
             default: {
                 /* */
                 // set range value to 500cm in automatic mode
-                    pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic|SEN0304.rang_500)
+                pins.i2cWriteRegister(SEN0304.address, SEN0304.cfg_index, SEN0304.mode_automatic | SEN0304.rang_500)
                 /* */
             }
         }
     }
-    
+
 
 }
