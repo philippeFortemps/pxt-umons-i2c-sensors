@@ -12,8 +12,9 @@ This repository can be added as an **extension** in MakeCode.
 
 ## Blocks preview
 
-To operate the color sensor, you must
+To operate the color / distance sensor, you must
 * initialize the sensor at startup
+* if necessary, set other configuration values
 * ask the sensor to make a measurement
 * exploit the available values about this measurement
 
