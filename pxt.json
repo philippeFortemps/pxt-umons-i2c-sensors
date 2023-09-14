@@ -7,7 +7,9 @@
     "files": [
         "main.ts",
         "README.md",
-        "sensors.ts"
+        "sensors.ts",
+        "sensor-tcs34725.ts",
+        "SENSOR-SEN0304.ts"
     ],
     "testFiles": [
         "test.ts"
